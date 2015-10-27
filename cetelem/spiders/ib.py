@@ -8,7 +8,6 @@ import urlparse
 import scrapy
 
 from cetelem import items as cetitems
-from cetelem import settings
 
 
 class IbSpider(scrapy.Spider):
@@ -28,8 +27,8 @@ class IbSpider(scrapy.Spider):
         # Get form name and build form data
         formname = response.selector.xpath("//*[re:test(@id, 'PC_.*_LoginForm')]/@name").extract()[0]
         formdata = {
-            'userid': settings.USERID,
-            'password': ''.join(buttons[c] for c in settings.PASSWORD),
+            'userid': self.settings.get('USERID'),
+            'password': ''.join(buttons[c] for c in self.settings.get('PASSWORD')),
         }
         item = cetitems.CetelemItem()
 

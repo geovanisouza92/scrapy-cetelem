@@ -9,10 +9,9 @@
 
 from __future__ import print_function
 
+from pushbullet import Pushbullet
 from scrapy import log
 from scrapy.exceptions import DropItem
-from pushbullet import Pushbullet
-from cetelem import settings
 
 
 TEMPLATE = u'''
@@ -25,13 +24,20 @@ Fatura do mês %(mes_proximo)s: %(subtotal_proximo)s
 
 
 class CetelemPipeline(object):
+
     def process_item(self, item, spider):
         return item
 
 
 class PushbulletPipeline(object):
-    def __init__(self):
-        self.pb = Pushbullet(settings.PUSHBULLET_APIKEY)  # pylint: disable=C0103
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(pb_key=crawler.settings.get('PUSHBULLET_APIKEY'))
+
+    def __init__(self, pb_key):
+        super(PushbulletPipeline, self).__init__()
+        self.pb = Pushbullet(pb_key)  # pylint: disable=C0103
 
     def process_item(self, item, spider):
         content = TEMPLATE % item

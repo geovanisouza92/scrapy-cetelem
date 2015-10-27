@@ -2,7 +2,13 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=C0301,F0401
 
-from decouple import config
+try:
+    from decouple import config
+    USERID = config('USERID')
+    PASSWORD = config('PASSWORD')
+    PUSHBULLET_APIKEY = config('PUSHBULLET_APIKEY')
+except Exception:  # pylint: disable=W0703
+    pass
 
 # Scrapy settings for cetelem project
 #
@@ -87,7 +93,3 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR='httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES=[]
 #HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-USERID = config('USERID')
-PASSWORD = config('PASSWORD')
-PUSHBULLET_APIKEY = config('PUSHBULLET_APIKEY')
